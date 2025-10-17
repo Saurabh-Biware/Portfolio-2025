@@ -84,7 +84,7 @@ export const Vortex = (props: VortexProps) => {
     let x, y, vx, vy, life, ttl, speed, radius, hue;
 
     x = rand(canvas.width);
-    y = center[1] + randRange(rangeY);
+    y = rand(canvas.height);
     vx = 0;
     vy = 0;
     life = 0;

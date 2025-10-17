@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import {
+  BookOpen,
   Brain,
   Code2,
   Mail,
@@ -13,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +23,18 @@ const Navbar = () => {
       } else {
         setIsScrolled(false);
       }
+
+      // Active section detection
+      const sections = ['hero', 'technologies', 'about', 'github-projects', 'blogs', 'contact'];
+      const current = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -31,8 +45,8 @@ const Navbar = () => {
     { href: "#hero", label: "Home", icon: User },
     { href: "#technologies", label: "Skills", icon: Brain },
     { href: "#about", label: "About Me", icon: User },
-    { href: "#projects", label: "Projects", icon: Code2 },
-    
+    { href: "#github-projects", label: "Projects", icon: Code2 },
+    { href: "#blogs", label: "Blogs", icon: BookOpen },
   ];
 
   return (
@@ -64,7 +78,11 @@ const Navbar = () => {
             <div className="flex px-8 py-2 bg-gray-900/30 backdrop-blur-md rounded-full border border-white/10 shadow-xl">
               <div className="flex space-x-8 items-center justify-center">
                 {navItems.map((item) => (
-                  <IslandNavLink key={item.href} href={item.href}>
+                  <IslandNavLink 
+                    key={item.href} 
+                    href={item.href}
+                    isActive={activeSection === item.href.substring(1)}
+                  >
                     <item.icon className="w-4 h-4 mr-2" />
                     {item.label}
                   </IslandNavLink>
@@ -106,25 +124,38 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <motion.div 
           className="md:hidden p-4 bg-gray-900/95 dark:bg-gray-900/95 light:bg-gray-100/95 border-t border-gray-800 dark:border-gray-800 light:border-gray-300 backdrop-blur-md"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
           <div className="flex flex-col space-y-3">
-            {navItems.map((item) => (
-              <MobileNavLink 
-                key={item.href} 
-                href={item.href} 
-                onClick={() => setMobileMenuOpen(false)}
+            {navItems.map((item, index) => (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05, duration: 0.2 }}
               >
-                <item.icon className="w-4 h-4 mr-2" />
-                {item.label}
-              </MobileNavLink>
+                <MobileNavLink 
+                  href={item.href} 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <item.icon className="w-4 h-4 mr-2" />
+                  {item.label}
+                </MobileNavLink>
+              </motion.div>
             ))}
-            <MobileNavLink href="#contact" onClick={() => setMobileMenuOpen(false)}>
-              <Mail className="w-4 h-4 mr-2" />
-              Contact
-            </MobileNavLink>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: navItems.length * 0.05, duration: 0.2 }}
+            >
+              <MobileNavLink href="#contact" onClick={() => setMobileMenuOpen(false)}>
+                <Mail className="w-4 h-4 mr-2" />
+                Contact
+              </MobileNavLink>
+            </motion.div>
           </div>
         </motion.div>
       )}
@@ -134,19 +165,27 @@ const Navbar = () => {
 
 const IslandNavLink = ({ 
   href, 
-  children 
+  children,
+  isActive 
 }: { 
   href: string; 
   children: React.ReactNode;
+  isActive?: boolean;
 }) => {
   return (
     <a 
       href={href} 
-      className="relative px-3 py-2 text-gray-300 hover:text-white transition-all duration-300 group flex items-center"
+      className={`relative px-3 py-2 transition-all duration-300 group flex items-center ${
+        isActive ? 'text-white' : 'text-gray-300 hover:text-white'
+      }`}
     >
       <span className="relative z-10 flex items-center">{children}</span>
-      <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-blue-500/20 group-hover:via-purple-500/20 group-hover:to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-full blur-sm transition-all duration-300"></span>
-      <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
+      <span className={`absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-pink-500/0 rounded-full blur-sm transition-all duration-300 ${
+        isActive ? 'from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-100' : 'opacity-0 group-hover:opacity-100 group-hover:from-blue-500/20 group-hover:via-purple-500/20 group-hover:to-pink-500/20'
+      }`}></span>
+      <span className={`absolute bottom-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-300 ${
+        isActive ? 'w-full left-0' : 'w-0 left-1/2 group-hover:w-full group-hover:left-0'
+      }`}></span>
     </a>
   );
 };

@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Download, Eye, FileText, Github, Linkedin } from 'lucide-react';
 import AnimatedText from './AnimatedText';
-import { TechSphere } from './ui/tech-sphere';
 
 const Hero = () => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
   const handleResumeView = () => {
     window.open('https://drive.google.com/file/d/1VUSKW1wqYyrtRYFavCwJ8cHgxCIK4WwW/view?usp=sharing', '_blank');
   };
@@ -14,9 +17,26 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-36">
-      <div className="container mx-auto px-4 z-10">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-36">
+      <motion.div style={{ y, opacity }} className="container mx-auto px-4 z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Mobile Photo - Shows first on mobile */}
+          <motion.div 
+            className="flex lg:hidden justify-center order-first"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            <div className="relative w-48 h-48">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+              <img 
+                src="https://github.com/saurabh-biware.png" 
+                alt="Saurabh Biware"
+                className="relative w-full h-full rounded-full object-cover border-4 border-blue-500/30 shadow-2xl"
+              />
+            </div>
+          </motion.div>
+          
           {/* Left Side - Content */}
           <div className="text-center lg:text-left">
           <motion.h1 
@@ -84,17 +104,19 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.6 }}
           >
-            <Button className="py-6 px-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
-              <Eye className="w-5 h-5 mr-2" />
-              <a href="#projects">My Work</a>
-            </Button>
-            <div className="flex items-center gap-2">
+            <a href="#github-projects" className="w-full sm:w-auto">
+              <Button className="w-full py-6 px-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2">
+                <Eye className="w-5 h-5" />
+                My Work
+              </Button>
+            </a>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <Button 
                 variant="outline" 
-                className="py-6 px-8 border-blue-500/30 text-blue-400 hover:bg-blue-900/20 flex items-center gap-2"
+                className="flex-1 sm:flex-none py-6 px-8 border-blue-500/30 text-blue-400 hover:bg-blue-900/20 flex items-center justify-center gap-2"
                 onClick={handleResumeView}
               >
-                <FileText className="w-5 h-5 mr-2" />
+                <FileText className="w-5 h-5" />
                 Resume
               </Button>
               <Button 
@@ -157,17 +179,24 @@ const Hero = () => {
           </motion.div>
           </div>
           
-          {/* Right Side - TechSphere */}
+          {/* Right Side - Desktop Photo */}
           <motion.div 
-            className="hidden lg:flex items-center justify-center h-[600px]"
+            className="hidden lg:flex items-center justify-center"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            <TechSphere />
+            <div className="relative w-full max-w-md aspect-square">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+              <img 
+                src="https://github.com/saurabh-biware.png" 
+                alt="Saurabh Biware"
+                className="relative w-full h-full rounded-full object-cover border-8 border-blue-500/20 shadow-2xl hover:scale-105 transition-transform duration-500"
+              />
+            </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

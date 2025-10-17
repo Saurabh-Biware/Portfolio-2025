@@ -89,7 +89,12 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border border-gray-300/30 dark:border-white/10 shadow-lg;
+    @apply bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border border-gray-300/30 dark:border-white/10 shadow-lg transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply transform -translate-y-2 shadow-2xl;
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2), 0 0 20px rgba(139, 92, 246, 0.15);
   }
 
   .section-container {
