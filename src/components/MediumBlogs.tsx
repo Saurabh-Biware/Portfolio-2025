@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
+import { motion } from 'framer-motion';
 import { BookOpen, Clock, ExternalLink } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface MediumPost {
   title: string;
@@ -104,13 +104,19 @@ const MediumBlogs = () => {
             viewport={{ once: true }}
           >
             <Card className="glass-card rounded-xl border-muted h-full hover:border-blue-400 transition-all group overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-900/50 to-purple-900/50">
                 <img 
                   src={post.thumbnail} 
                   alt={post.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <BookOpen className="w-16 h-16 text-blue-400/30" />
+                </div>
               </div>
               <CardContent className="p-6 flex flex-col">
                 <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
