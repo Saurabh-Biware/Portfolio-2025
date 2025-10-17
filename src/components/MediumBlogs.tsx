@@ -18,7 +18,10 @@ const MediumBlogs = () => {
   const username = 'saurabhbiware';
 
   useEffect(() => {
-    fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${username}`)
+    const cacheBuster = Date.now();
+    fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${username}&_=${cacheBuster}`, {
+      cache: 'no-cache'
+    })
       .then(res => res.json())
       .then(data => {
         const posts = data.items.slice(0, 6).map((item: any) => {
@@ -106,7 +109,7 @@ const MediumBlogs = () => {
             <Card className="glass-card rounded-xl border-muted h-full hover:border-blue-400 transition-all group overflow-hidden">
               <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-900/50 to-purple-900/50">
                 <img 
-                  src={post.thumbnail} 
+                  src={`${post.thumbnail}?${Date.now()}`}
                   alt={post.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   onError={(e) => {
