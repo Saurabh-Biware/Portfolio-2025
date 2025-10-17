@@ -26,10 +26,20 @@ const MediumBlogs = () => {
       .then(data => {
         const posts = data.items.slice(0, 6).map((item: any) => {
           let thumbnail = 'https://miro.medium.com/v2/resize:fit:1200/1*jfdwtvU6V6g99q3G7gq7dQ.png';
-          const imgMatch = item.description.match(/<img[^>]+src="([^"]+)"/);
-          if (imgMatch && imgMatch[1]) {
-            thumbnail = imgMatch[1];
+          
+          // Try multiple methods to get thumbnail
+          if (item.thumbnail) {
+            thumbnail = item.thumbnail;
+          } else if (item.enclosure && item.enclosure.link) {
+            thumbnail = item.enclosure.link;
+          } else {
+            const imgMatch = item.content?.match(/<img[^>]+src="([^"]+)"/) || 
+                           item.description?.match(/<img[^>]+src="([^"]+)"/);
+            if (imgMatch && imgMatch[1]) {
+              thumbnail = imgMatch[1];
+            }
           }
+          
           return {
             title: item.title,
             link: item.link,
@@ -109,16 +119,22 @@ const MediumBlogs = () => {
             <Card className="glass-card rounded-xl border-muted h-full hover:border-blue-400 transition-all group overflow-hidden">
               <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-900/50 to-purple-900/50">
                 <img 
-                  src={`${post.thumbnail}?${Date.now()}`}
+                  src={post.thumbnail}
                   alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-10"
+                  loading="eager"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      const icon = parent.querySelector('.fallback-icon');
+                      if (icon) icon.classList.remove('hidden');
+                    }
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <BookOpen className="w-16 h-16 text-blue-400/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60 z-20"></div>
+                <div className="absolute inset-0 flex items-center justify-center fallback-icon hidden">
+                  <BookOpen className="w-16 h-16 text-blue-400/50" />
                 </div>
               </div>
               <CardContent className="p-6 flex flex-col">
