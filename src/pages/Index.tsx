@@ -1,4 +1,5 @@
 import About from '@/components/About';
+import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
 import CustomScrollbar from '@/components/CustomScrollbar';
 import Features from '@/components/Features';
@@ -32,6 +33,8 @@ const Index = () => {
           <SectionDivider />
           {/* <Projects /> */}
           <GitHubProjects />
+          <SectionDivider />
+          <Certifications />
           <SectionDivider />
           <MediumBlogs />
           <SectionDivider />

@@ -13,7 +13,7 @@ const experienceData: TimelineItem[] = [
   {
     id: 1,
     year: "Apr 2022 - Present",
-    title: "Software Engineer - Oerlikon Digital Hub",
+    title: "Full Stack Developer - Oerlikon Digital Hub",
     description: `• Revamped digital ordering platform UX, boosting conversion rates by 25% through responsive design and performance optimization, achieving 40% faster load times using modern frontend frameworks integrated with backend Node.js microservices.
 
 • Achieved 30% reduction in critical bugs by analyzing issue reports before and after frontend overhaul, improving overall system architecture and microservice communication.

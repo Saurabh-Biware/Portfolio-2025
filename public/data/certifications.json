@@ -1,0 +1,14 @@
+{
+  "certifications": [
+    {
+      "id": "azure-ai-fundamentals",
+      "title": "Microsoft Azure AI Fundamentals (AI-900)",
+      "issuer": "Microsoft",
+      "description": "Foundational knowledge of artificial intelligence and machine learning concepts and related Microsoft Azure services.",
+      "image": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg",
+      "tags": ["Azure", "AI", "Machine Learning", "Microsoft", "Fundamentals"],
+      "credentialUrl": "https://learn.microsoft.com/api/credentials/share/en-us/SaurabhBiware-5490/2D0CE43CA3A5A3EB?sharingId=7CDC031130A478CD",
+      "status": "lifetime"
+    }
+  ]
+}
